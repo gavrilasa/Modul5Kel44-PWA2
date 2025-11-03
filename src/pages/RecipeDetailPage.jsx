@@ -116,6 +116,7 @@ export default function RecipeDetailPage({ recipeId, onBack }) {
 						src={recipe.image_url}
 						alt={recipe.name}
 						className="w-full h-96 object-cover rounded-2xl shadow-lg"
+						loading="lazy"
 					/>
 				</div>
 				{/* Recipe Header */}

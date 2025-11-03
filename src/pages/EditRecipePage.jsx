@@ -53,18 +53,22 @@ export default function EditRecipePage({ recipeId, onBack, onSuccess }) {
 					setCurrentImageUrl(recipe.image_url || "");
 					setIngredients(
 						recipe.ingredients && recipe.ingredients.length > 0
-							? recipe.ingredients
+							? recipe.ingredients.map((ing) => ({
+									name: ing.name || "",
+									quantity: ing.quantity || "",
+							  }))
 							: [{ name: "", quantity: "" }]
 					);
 					// Convert steps to array of strings if they're objects
 					let stepsArray = [""];
 					if (recipe.steps && recipe.steps.length > 0) {
 						stepsArray = recipe.steps.map((step) => {
-							// If step is an object with a 'step' property, extract it
-							if (typeof step === "object" && step.step) {
-								return step.step;
+							// === PERBAIKAN 1 ===
+							// Mengganti 'step.step' menjadi 'step.instruction'
+							if (typeof step === "object" && step.instruction) {
+								return step.instruction;
 							}
-							// If step is already a string, use it
+							// Jika step sudah string (dari API lama/draft)
 							return typeof step === "string" ? step : "";
 						});
 					}
@@ -192,9 +196,10 @@ export default function EditRecipePage({ recipeId, onBack, onSuccess }) {
 			if (typeof step === "string") {
 				return step.trim();
 			}
-			// If step is an object, check if it has a 'step' property
-			if (typeof step === "object" && step.step) {
-				return step.step.trim();
+			// === PERBAIKAN 2 ===
+			// Mengganti 'step.step' menjadi 'step.instruction' (jika masih objek)
+			if (typeof step === "object" && step.instruction) {
+				return step.instruction.trim();
 			}
 			return false;
 		});
@@ -245,15 +250,17 @@ export default function EditRecipePage({ recipeId, onBack, onSuccess }) {
 					if (typeof step === "string") {
 						return step.trim();
 					}
-					if (typeof step === "object" && step.step) {
-						return step.step.trim();
+					// === PERBAIKAN 3 ===
+					// Mengganti 'step.step' menjadi 'step.instruction'
+					if (typeof step === "object" && step.instruction) {
+						return step.instruction.trim();
 					}
 					return false;
 				})
 				.map((step) => {
-					// Convert to string if it's an object
-					if (typeof step === "object" && step.step) {
-						return step.step;
+					// Convert to string (jika masih objek)
+					if (typeof step === "object" && step.instruction) {
+						return step.instruction;
 					}
 					return step;
 				});
@@ -337,6 +344,7 @@ export default function EditRecipePage({ recipeId, onBack, onSuccess }) {
 										src={imagePreview}
 										alt="Preview"
 										className="w-full h-64 object-cover rounded-xl"
+										loading="lazy"
 									/>
 									<button
 										type="button"
@@ -356,6 +364,7 @@ export default function EditRecipePage({ recipeId, onBack, onSuccess }) {
 										src={currentImageUrl}
 										alt="Current"
 										className="w-full h-64 object-cover rounded-xl"
+										loading="lazy"
 									/>
 									<button
 										type="button"

@@ -1,3 +1,4 @@
+// src/services/reviewService.js
 import { apiClient } from "../config/api";
 
 class ReviewService {
@@ -11,6 +12,24 @@ class ReviewService {
 			const response = await apiClient.get(
 				`/api/v1/recipes/${recipeId}/reviews`
 			);
+			return response;
+		} catch (error) {
+			throw error;
+		}
+	}
+
+	/**
+	 * Get all reviews by a specific user
+	 * @param {string} userIdentifier User identifier
+	 * @returns {Promise}
+	 */
+	async getReviewsByUser(userIdentifier) {
+		try {
+			// Endpoint ini mengasumsikan API mendukung filter by user_identifier
+			// e.g., /api/v1/reviews?user_identifier=...
+			const response = await apiClient.get("/api/v1/reviews", {
+				params: { user_identifier: userIdentifier },
+			});
 			return response;
 		} catch (error) {
 			throw error;

@@ -1,8 +1,10 @@
+// src/hooks/useReviews.js
 import { useState, useEffect, useCallback } from "react";
 import reviewService from "../services/reviewService";
+import { getUserIdentifier } from "./useFavorites"; // Import user identifier
 
 /**
- * Custom hook for fetching reviews
+ * Custom hook for fetching reviews for a specific recipe
  * @param {string} recipeId Recipe ID
  * @returns {Object} { reviews, loading, error, refetch }
  */
@@ -38,6 +40,46 @@ export function useReviews(recipeId) {
 	}, [fetchReviews]);
 
 	return { reviews, loading, error, refetch: fetchReviews };
+}
+
+/**
+ * Custom hook for fetching all reviews by the current user
+ * @returns {Object} { myReviews, loading, error, refetch }
+ */
+export function useReviewsByUser() {
+	const [myReviews, setMyReviews] = useState([]);
+	const [loading, setLoading] = useState(true);
+	const [error, setError] = useState(null);
+	const userIdentifier = getUserIdentifier();
+
+	const fetchUserReviews = useCallback(async () => {
+		if (!userIdentifier) {
+			setLoading(false);
+			return;
+		}
+		try {
+			setLoading(true);
+			setError(null);
+			const response = await reviewService.getReviewsByUser(userIdentifier);
+			if (response.success) {
+				// Pastikan backend mengembalikan nama resep bersama ulasan
+				setMyReviews(response.data || []);
+			} else {
+				setError(response.message || "Failed to fetch user reviews");
+			}
+		} catch (err) {
+			setError(err.message || "An error occurred while fetching user reviews");
+			setMyReviews([]);
+		} finally {
+			setLoading(false);
+		}
+	}, [userIdentifier]);
+
+	useEffect(() => {
+		fetchUserReviews();
+	}, [fetchUserReviews]);
+
+	return { myReviews, loading, error, refetch: fetchUserReviews };
 }
 
 /**

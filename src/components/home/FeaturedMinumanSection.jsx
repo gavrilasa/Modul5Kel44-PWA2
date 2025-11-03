@@ -115,6 +115,7 @@ export default function FeaturedMinumanSection({
 										src={recipe.image_url}
 										alt={recipe.name}
 										className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+										loading="lazy"
 									/>
 								</div>
 								<div className="relative z-10 p-4 md:p-8 flex-1 flex flex-col justify-center">
