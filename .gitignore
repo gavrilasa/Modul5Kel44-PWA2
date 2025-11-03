@@ -1,0 +1,59 @@
+# --------------------
+# Dependency Directories
+# --------------------
+node_modules/
+/package-lock.json
+/yarn.lock
+/pnpm-lock.yaml
+
+# --------------------
+# Build & Output Files
+# --------------------
+# Vite & general build output
+/dist
+/dist-ssr
+/dev-dist
+/coverage
+/.vite/
+
+# Rollup/Vite cache files
+.rollup.cache
+
+# --------------------
+# Logs & Temporary Files
+# --------------------
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+*.local
+*.tsbuildinfo
+
+# --------------------
+# Environment Variables
+# --------------------
+# Local environment variables
+.env
+.env.local
+.env.*.local
+
+# --------------------
+# OS & IDE Specific Files
+# --------------------
+# macOS
+.DS_Store
+
+# Editors
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Windows/Visual Studio
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
